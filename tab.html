@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Google Tab with Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 2em;
+      background: #f8f9fa;
+    }
+
+    .google-logo {
+      margin-top: 50px;
+    }
+
+    .search-box {
+      margin: 30px auto;
+      width: 50%;
+      min-width: 300px;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 24px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      background-color: #4285f4;
+      color: white;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 80%;
+      height: 200px;
+      margin-top: 40px;
+      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+
+  <img class="google-logo" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" width="272" height="92" />
+
+  <div class="search-box">
+    <form action="https://www.google.com/search" method="GET" target="_blank">
+      <input type="text" name="q" placeholder="Search Google..." autofocus />
+      <br>
+      <button type="submit">Google Search</button>
+    </form>
+  </div>
+
+  <h2>My Notes</h2>
+  <textarea id="notes" placeholder="Write your to-do list or notes here..."></textarea>
+
+  <script>
+    // Save and load notes using localStorage
+    const notesBox = document.getElementById('notes');
+    notesBox.value = localStorage.getItem('myNotes') || '';
+    notesBox.addEventListener('input', () => {
+      localStorage.setItem('myNotes', notesBox.value);
+    });
+  </script>
+
+</body>
+</html>
+
