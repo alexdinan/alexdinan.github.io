@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Custom Google Tab with Notes</title>
+  <title>Custom Google Tab + To-Do</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin: 0;
-      padding: 2em;
       background: #f8f9fa;
+      padding: 2em;
     }
 
     .google-logo {
-      margin-top: 50px;
+      margin-top: 40px;
     }
 
     .search-box {
       margin: 30px auto;
-      width: 50%;
+      width: 60%;
       min-width: 300px;
     }
 
@@ -32,7 +31,7 @@
     }
 
     button {
-      padding: 10px 20px;
+      padding: 10px 16px;
       margin-top: 10px;
       border: none;
       background-color: #4285f4;
@@ -42,42 +41,98 @@
       cursor: pointer;
     }
 
-    textarea {
-      width: 80%;
-      height: 200px;
-      margin-top: 40px;
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      padding: 10px 15px;
+      margin: 8px auto;
+      width: 60%;
       font-size: 16px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      resize: vertical;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .delete-btn {
+      background-color: #e53935;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <img class="google-logo" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" width="272" height="92" />
+  <img class="google-logo" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" width="272" height="92">
 
   <div class="search-box">
-    <form action="https://www.google.com/search" method="GET" target="_blank">
-      <input type="text" name="q" placeholder="Search Google..." autofocus />
+    <form id="searchForm" action="https://www.google.com/search" method="GET">
+      <input type="text" name="q" id="searchInput" placeholder="Search Google..." autofocus>
       <br>
       <button type="submit">Google Search</button>
     </form>
   </div>
 
-  <h2>My Notes</h2>
-  <textarea id="notes" placeholder="Write your to-do list or notes here..."></textarea>
+  <h2>To-Do List</h2>
+  <form id="todoForm">
+    <input type="text" id="todoInput" placeholder="Add a new task..." />
+    <button type="submit">Add</button>
+  </form>
+
+  <ul id="todoList"></ul>
 
   <script>
-    // Save and load notes using localStorage
-    const notesBox = document.getElementById('notes');
-    notesBox.value = localStorage.getItem('myNotes') || '';
-    notesBox.addEventListener('input', () => {
-      localStorage.setItem('myNotes', notesBox.value);
+    const form = document.getElementById('todoForm');
+    const input = document.getElementById('todoInput');
+    const list = document.getElementById('todoList');
+
+    // Load saved todos
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+
+    function renderTodos() {
+      list.innerHTML = '';
+      todos.forEach((todo, index) => {
+        const li = document.createElement('li');
+        li.textContent = todo;
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.className = 'delete-btn';
+        delBtn.onclick = () => {
+          todos.splice(index, 1);
+          localStorage.setItem('todos', JSON.stringify(todos));
+          renderTodos();
+        };
+
+        li.appendChild(delBtn);
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (text) {
+        todos.push(text);
+        localStorage.setItem('todos', JSON.stringify(todos));
+        input.value = '';
+        renderTodos();
+      }
     });
+
+    // Prevent search from opening in new tab
+    document.getElementById('searchForm').target = '';
+
+    renderTodos();
   </script>
 
 </body>
 </html>
-
