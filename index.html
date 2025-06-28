@@ -16,7 +16,7 @@
     }
 
     .search-box {
-      margin: 30px auto;
+      margin: 30px auto 80px; /* extra margin below */
       width: 60%;
       min-width: 300px;
     }
@@ -41,16 +41,32 @@
       cursor: pointer;
     }
 
+    #todoForm {
+      margin: 0 auto 20px;
+      width: 60%;
+      display: flex;
+      gap: 10px;
+    }
+
+    #todoInput {
+      flex-grow: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
     ul {
       list-style: none;
       padding: 0;
+      margin: 0 auto;
+      width: 60%;
     }
 
     li {
       background: white;
       padding: 10px 15px;
-      margin: 8px auto;
-      width: 60%;
+      margin: 8px 0;
       font-size: 16px;
       border-radius: 6px;
       display: flex;
@@ -81,7 +97,6 @@
     </form>
   </div>
 
-  <h2>To-Do List</h2>
   <form id="todoForm">
     <input type="text" id="todoInput" placeholder="Add a new task..." />
     <button type="submit">Add</button>
@@ -94,7 +109,6 @@
     const input = document.getElementById('todoInput');
     const list = document.getElementById('todoList');
 
-    // Load saved todos
     let todos = JSON.parse(localStorage.getItem('todos')) || [];
 
     function renderTodos() {
@@ -128,7 +142,7 @@
       }
     });
 
-    // Prevent search from opening in new tab
+    // Prevent search from opening a new tab
     document.getElementById('searchForm').target = '';
 
     renderTodos();
